@@ -77,7 +77,7 @@ jobs:
       #
       - name: Update Config File
         run: |
-          CONFIG_FILE=config.json
+          CONFIG_FILE=./configs/config.json
           # Check if config.json exists, create it if not
           if [ ! -f $CONFIG_FILE ]; then
             echo '{"services": {}}' > $CONFIG_FILE
