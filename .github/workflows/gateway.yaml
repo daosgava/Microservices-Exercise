@@ -73,6 +73,30 @@ jobs:
           version: 'v1.24.2'
 
       #
+      # Update the centralized configuration file
+      #
+      - name: Update Config File
+        run: |
+          CONFIG_FILE=config.json
+          # Check if config.json exists, create it if not
+          if [ ! -f $CONFIG_FILE ]; then
+            echo '{"services": {}}' > $CONFIG_FILE
+          fi
+          
+          # Update the version for the gateway service
+          jq --arg version "${{ github.sha }}" --arg service "$NAME" '.services[$service].version = $version' $CONFIG_FILE > tmp.$$.json && mv tmp.$$.json $CONFIG_FILE
+
+      #
+      # Upload the updated config file as an artifact
+      #
+      - name: Upload Config File
+        uses: actions/upload-artifact@v3
+        with:
+          name: config-file
+          path: config.json
+
+
+      #
       # Expands the configuration template and deploys the microservice.
       #
       - name: Deploy
