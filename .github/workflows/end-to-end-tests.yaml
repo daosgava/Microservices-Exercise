@@ -25,7 +25,6 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
-    # Install Docker Compose
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v1
 
@@ -35,7 +34,7 @@ jobs:
 
     # Wait for services to be ready
     - name: Wait for services
-      run: sleep 30 # Adjust based on how long your services take to start
+      run: sleep 30
 
     # Run Playwright tests
     - name: Run Playwright tests
