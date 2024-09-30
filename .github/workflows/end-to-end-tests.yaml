@@ -1,15 +1,29 @@
-name: Run End-to-End Tests
+name: Run tests
 
 on:
   repository_dispatch:
     types: [run-tests]
+  
+  workflow_dispatch:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
+    env:
+      VERSION: latest
+      CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
+
     steps:
     - uses: actions/checkout@v3
+
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+
+    - name: Install Dependencies
+      run: npm install
 
     # Install Docker Compose
     - name: Set up Docker Buildx
@@ -17,7 +31,7 @@ jobs:
 
     # Spin up all services
     - name: Start services
-      run: docker-compose up -d
+      run: ./scripts/cd/run-docker-compose.sh
 
     # Wait for services to be ready
     - name: Wait for services
@@ -29,4 +43,4 @@ jobs:
 
     # Tear down services after tests
     - name: Tear down
-      run: docker-compose down
+      run: docker compose down

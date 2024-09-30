@@ -21,7 +21,7 @@ services:
 
   # Service for loading database fixtures.
   db-fixture-rest-api:
-    image: db-fixture-rest-api
+    image: $CONTAINER_REGISTRY/db-fixture-rest-api:$VERSION
     build: 
       context: ./db-fixture-rest-api
       dockerfile: Dockerfile
@@ -39,7 +39,7 @@ services:
     restart: always
 
   gateway:
-    image: gateway
+    image: $CONTAINER_REGISTRY/gateway:$VERSION
     build: 
       context: ./gateway
       dockerfile: Dockerfile-dev
@@ -59,7 +59,7 @@ services:
     restart: "no"
 
   video-streaming:
-    image: video-streaming
+    image: $CONTAINER_REGISTRY/video-streaming:$VERSION
     build: 
       context: ./video-streaming
       dockerfile: Dockerfile-dev
@@ -79,7 +79,7 @@ services:
     restart: "no"
 
   video-upload:
-    image: video-upload
+    image: $CONTAINER_REGISTRY/video-upload:$VERSION
     build: 
       context: ./video-upload
       dockerfile: Dockerfile-dev
@@ -99,7 +99,7 @@ services:
     restart: "no"
 
   history:
-    image: history
+    image: $CONTAINER_REGISTRY/history:$VERSION
     build: 
       context: ./history
       dockerfile: Dockerfile-dev
@@ -149,7 +149,7 @@ services:
   # local testing easier.
   #
   video-storage:
-    image: mock-storage
+    image: $CONTAINER_REGISTRY/video-storage:$VERSION
     build: 
       context: ./mock-storage
       dockerfile: Dockerfile-dev
@@ -165,7 +165,7 @@ services:
     restart: "no"
 
   metadata:
-    image: metadata
+    image: $CONTAINER_REGISTRY/metadata:$VERSION
     build: 
       context: ./metadata
       dockerfile: Dockerfile-dev
