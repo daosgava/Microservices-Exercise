@@ -78,12 +78,15 @@ jobs:
       - name: Update Config File
         run: |
           CONFIG_FILE=./configs/config.json
+          # Create the configs directory if it doesn't exist
+          mkdir -p ./configs
+
           # Check if config.json exists, create it if not
           if [ ! -f $CONFIG_FILE ]; then
             echo '{"services": {}}' > $CONFIG_FILE
           fi
           
-          # Update the version for the gateway service
+          # Update the version for the respective service
           jq --arg version "${{ github.sha }}" --arg service "$NAME" '.services[$service].version = $version' $CONFIG_FILE > tmp.$$.json && mv tmp.$$.json $CONFIG_FILE
 
       #
