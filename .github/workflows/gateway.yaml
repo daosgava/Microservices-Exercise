@@ -60,4 +60,4 @@ jobs:
         run: chmod +x ./scripts/cd/trigger-e2e-tests.sh
 
       - name: Trigger E2E tests
-        run: ./scripts/cd/trigger-e2e-tests.sh ${{ secrets.GITHUB_TOKEN }} deploy-gateway ${{VERSION}}
+        run: ./scripts/cd/trigger-e2e-tests.sh ${{ secrets.GITHUB_TOKEN }} deploy-gateway ${{ env.VERSION }}
