@@ -52,6 +52,7 @@ jobs:
       if: ${{ success() }}
       run: |
         NEXT_PIPELINE=${{ github.event.client_payload.next_pipeline }}
+        VERSION=${{ env.VERSION }}
         echo "Triggering next pipeline: $NEXT_PIPELINE"
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
