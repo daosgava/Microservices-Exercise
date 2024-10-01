@@ -20,7 +20,10 @@ on:
   #
   # Allows deployment to be invoked manually through the GitHub Actions user interface.
   #
-  workflow_dispatch: 
+  workflow_dispatch:
+
+  repository_dispatch:
+    types: [deploy-gateway]
 
 jobs:
 
@@ -51,6 +54,41 @@ jobs:
       #
       - name: Publish
         run: ./scripts/cd/push-image.sh
+
+      - name: Trigger E2E tests
+        run: |
+          curl -X POST \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.everest-preview+json" \
+            https://api.github.com/repos/daosgava/daniel-garcia-sit772-10-hd/dispatches \
+            -d '{"event_type":"run-tests"}'
+
+      - name: Wait for E2E tests to complete
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const { data: runs } = await github.rest.actions.listWorkflowRuns({
+              owner: 'daosgava',  // Owner of the target repository
+              repo: 'daniel-garcia-sit772-10-hd',  // Name of the target repository
+              event: 'repository_dispatch',  // This identifies the workflow triggered by the dispatch
+              status: 'completed',           // Check for completed status
+              per_page: 1                    // Get the latest run
+            });
+
+            if (runs.workflow_runs.length === 0) {
+              throw new Error('No E2E workflow runs found.');
+            }
+            const run_id = runs.workflow_runs[0].id;
+
+            const status = await github.rest.actions.getWorkflowRun({
+              owner: 'daosgava',
+              repo: 'daniel-garcia-sit772-10-hd',
+              run_id: run_id,
+            });
+
+            if (status.data.conclusion !== 'success') {
+              throw new Error('E2E tests failed.');
+            }
 
       #
       # Installs Kubectl and connects it to the cluster.
