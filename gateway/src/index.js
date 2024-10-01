@@ -28,7 +28,6 @@ async function main() {
         const videosResponse = await axios.get("http://metadata/videos");
 
         // Renders the video list for display in the browser.
-        // The videos are passed as a parameter to the view.
         res.render("video-list", { videos: videosResponse.data.videos });
     });
 
