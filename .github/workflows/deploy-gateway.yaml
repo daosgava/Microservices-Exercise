@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      VERSION: ${{ github.event.client_payload.next_pipeline }}
+      VERSION: ${{ github.event.client_payload.version }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       NAME: gateway
       DIRECTORY: gateway
