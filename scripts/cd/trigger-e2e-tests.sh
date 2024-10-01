@@ -3,6 +3,7 @@
 # Read inputs
 GITHUB_TOKEN=$1
 NEXT_PIPELINE=$2
+VERSION=$3
 OWNER="daosgava"
 REPO="daniel-garcia-sit772-10-hd"
 
@@ -18,7 +19,7 @@ curl -X POST \
   -H "Authorization: token $GITHUB_TOKEN" \
   -H "Accept: application/vnd.github.everest-preview+json" \
   https://api.github.com/repos/$OWNER/$REPO/dispatches \
-  -d "{\"event_type\":\"run-tests\", \"client_payload\": {\"next_pipeline\":\"$NEXT_PIPELINE\"}}"
+  -d "{\"event_type\":\"run-tests\", \"client_payload\": {\"next_pipeline\":\"$NEXT_PIPELINE\" , \"version\":\"$VERSION\"}}"
 
 if [ $? -eq 0 ]; then
   echo "E2E tests triggered successfully."

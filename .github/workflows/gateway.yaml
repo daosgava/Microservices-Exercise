@@ -32,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      VERSION: latest
+      VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
       REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
@@ -60,4 +60,4 @@ jobs:
         run: chmod +x ./scripts/cd/trigger-e2e-tests.sh
 
       - name: Trigger E2E tests
-        run: ./scripts/cd/trigger-e2e-tests.sh ${{ secrets.GITHUB_TOKEN }} deploy-gateway
+        run: ./scripts/cd/trigger-e2e-tests.sh ${{ secrets.GITHUB_TOKEN }} deploy-gateway ${{VERSION}}

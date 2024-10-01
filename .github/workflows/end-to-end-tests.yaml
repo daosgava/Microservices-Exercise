@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      VERSION: latest
+      VERSION: ${{ github.event.client_payload.version }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
       REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
@@ -57,4 +57,4 @@ jobs:
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.everest-preview+json" \
           https://api.github.com/repos/daosgava/daniel-garcia-sit772-10-hd/dispatches \
-          -d "{\"event_type\":\"$NEXT_PIPELINE\"}"
+          -d "{\"event_type\":\"$NEXT_PIPELINE\" \"client_payload\":{\"version\":\"$VERSION\"}}"
