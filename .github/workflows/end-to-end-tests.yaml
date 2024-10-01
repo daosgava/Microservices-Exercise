@@ -3,8 +3,12 @@ name: Run tests
 on:
   repository_dispatch:
     types: [run-tests]
-  
+
   workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
 
 jobs:
   test:
@@ -47,8 +51,10 @@ jobs:
     - name: Trigger Deployment Pipeline
       if: ${{ success() }}
       run: |
+        NEXT_PIPELINE=${{ github.event.client_payload.next_pipeline }}
+        echo "Triggering next pipeline: $NEXT_PIPELINE"
         curl -X POST \
           -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
           -H "Accept: application/vnd.github.everest-preview+json" \
           https://api.github.com/repos/daosgava/daniel-garcia-sit772-10-hd/dispatches \
-          -d '{"event_type":"deploy-gateway"}'
+          -d "{\"event_type\":\"$NEXT_PIPELINE\"}"

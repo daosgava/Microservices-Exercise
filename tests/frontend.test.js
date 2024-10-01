@@ -29,5 +29,9 @@ describe("flixtube front end", () => {
         await expect(secondVideo).toHaveAttribute("href", "/video?id=5ea234a5c34230004592eb33"); // Make sure link is correct.
     });
 
-    // Other tests go here.
+    test("find the Videos Update text", async ({ page }) => {
+        await page.goto(`/`);
+        const updateText = page.getByText("Videos Updaaate");
+        await expect(updateText).toBeVisible();
+    });
 });
