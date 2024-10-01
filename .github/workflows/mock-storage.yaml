@@ -20,7 +20,11 @@ on:
   #
   # Allows deployment to be invoked manually through the GitHub Actions user interface.
   #
-  workflow_dispatch: 
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: read
 
 jobs:
 
@@ -28,7 +32,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      VERSION: latest
+      VERSION: ${{ github.sha }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
       REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
       REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
@@ -52,28 +56,8 @@ jobs:
       - name: Publish
         run: ./scripts/cd/push-image.sh
 
-      #
-      # Installs Kubectl and connects it to the cluster.
-      #
-      # https://github.com/marketplace/actions/kubernetes-cli-kubectl
-      #
-      # - uses: tale/kubectl-action@v1
-      #   with:
-      #     base64-kube-config: ${{ secrets.KUBE_CONFIG }}
-      #     kubectl-version: v1.24.2
-      - name: Setup kubeconfig
-        run: |
-          mkdir -p ~/.kube
-          echo "${{ secrets.KUBE_CONFIG }}" | base64 --decode | gunzip > ~/.kube/config
-          chmod 600 ~/.kube/config
+      - name: Make trigger-e2e-tests.sh executable
+        run: chmod +x ./scripts/cd/trigger-e2e-tests.sh
 
-      # Install Kubectl and use the decompressed kubeconfig
-      - uses: azure/setup-kubectl@v1
-        with:
-          version: 'v1.24.2'
-      
-      #
-      # Expands the configuration template and deploys the microservice.
-      #
-      - name: Deploy
-        run: ./scripts/cd/deploy.sh
+      - name: Trigger E2E tests
+        run: ./scripts/cd/trigger-e2e-tests.sh ${{ secrets.GITHUB_TOKEN }} deploy-mock-storage ${{ env.VERSION }}

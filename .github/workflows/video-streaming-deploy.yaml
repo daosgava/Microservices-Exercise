@@ -5,17 +5,16 @@
 # For real use you might want to restrict this to the "prod" branch.
 #
 
-name: Deploy gateway
+name: Deploy video-streaming
 
 on:
-
   #
   # Allows deployment to be invoked manually through the GitHub Actions user interface.
   #
   workflow_dispatch:
 
   repository_dispatch:
-    types: [deploy-gateway]
+    types: [deploy-video-streaming]
 
 jobs:
 
@@ -25,11 +24,12 @@ jobs:
     env:
       VERSION: ${{ github.event.client_payload.version }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
-      NAME: gateway
-      DIRECTORY: gateway
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
+      NAME: video-streaming
+      DIRECTORY: video-streaming
 
     steps:
-      
       # Checks-out your repository under $GITHUB_WORKSPACE.
       - uses: actions/checkout@v3
 
@@ -46,7 +46,7 @@ jobs:
       - uses: azure/setup-kubectl@v1
         with:
           version: 'v1.24.2'
-
+      
       #
       # Expands the configuration template and deploys the microservice.
       #

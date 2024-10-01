@@ -5,17 +5,16 @@
 # For real use you might want to restrict this to the "prod" branch.
 #
 
-name: Deploy gateway
+name: Deploy mock-storage
 
 on:
-
   #
   # Allows deployment to be invoked manually through the GitHub Actions user interface.
   #
-  workflow_dispatch:
+  workflow_dispatch: 
 
   repository_dispatch:
-    types: [deploy-gateway]
+    types: [deploy-mock-storage]
 
 jobs:
 
@@ -25,8 +24,10 @@ jobs:
     env:
       VERSION: ${{ github.event.client_payload.version }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
-      NAME: gateway
-      DIRECTORY: gateway
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW  }}
+      NAME: mock-storage
+      DIRECTORY: mock-storage
 
     steps:
       
@@ -46,7 +47,7 @@ jobs:
       - uses: azure/setup-kubectl@v1
         with:
           version: 'v1.24.2'
-
+      
       #
       # Expands the configuration template and deploys the microservice.
       #
