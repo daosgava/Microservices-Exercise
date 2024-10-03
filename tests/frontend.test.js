@@ -31,7 +31,7 @@ describe("flixtube front end", () => {
 
     test("find the Videos Update text", async ({ page }) => {
         await page.goto(`/`);
-        const updateText = page.getByText("Videos Edited");
+        const updateText = page.getByText("Videos Edted");
         await expect(updateText).toBeVisible();
     });
 });
