@@ -1,4 +1,4 @@
-# Microservices Exercise
+# Microservices Exercise - Javascript
 
 Code example for Chapter 10 of [Bootstrapping Microservices](https://www.bootstrapping-microservices.com/).
 
